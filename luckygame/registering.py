@@ -4,6 +4,14 @@ from connector import saver
 
 from connectDB import cursor, conn
 from luckygame import LuckyGame
+from prettytable import PrettyTable
+
+
+# add to version 3.0.1
+table1 = PrettyTable()
+table1.field_names = ["ID", "Name"]
+table2 = PrettyTable()
+table2.field_names = ["ID", "Name", "Count GoldCoin", "Change Box", "Score", "Count Opened Boxes", "Count Mojeze"]
 
 
 def add_game(user_id: int, name: str) -> None:
@@ -16,6 +24,7 @@ def add_game(user_id: int, name: str) -> None:
     :return:
     The return value of this call is the user_menu function.
     """
+
     sample = LuckyGame(user_id, name)
     cursor.execute('''INSERT INTO games (user_id, name, change_box, score, total_boxes, mojeze, gold_coin) 
                 VALUES (?, ?, ?, ?, ?, ?, ? )''', (sample.user_id, sample.name, sample.myChangeBox,
@@ -46,9 +55,12 @@ def show_user_games(user_id: int) -> None:
 
     if games:
         print("your games: ")
+        table1.clear_rows()
         for game in games:
             # print(game)
-            print(f'ID: {game[0]}, Name: {game[1]}')
+            # edit to version 3.0.1
+            table1.add_row([game[0], game[1]])
+        print(table1)
         question = input("your show detail game clicked ID Number (i'm not show detail: exit): ")
         if question == "exit":
             user_menu(user_id)
@@ -56,8 +68,11 @@ def show_user_games(user_id: int) -> None:
         else:
             for game in games:
                 if game[0] == int(question):
-                    print(f'ID: {game[0]}, Name: {game[1]}\nCount GoldCoin: {game[6]}\nChange Box: {game[2]}\t'
-                          f'Score: {game[3]}\ncount opened boxes: {game[4]}\t count mojeze: {game[5]}')
+                    # edit to version 3.0.1
+                    table2.clear_rows()
+                    table2.add_row([game[0], game[1], game[6], game[2], game[3], game[4], game[5]])
+                    print(table2)
+
             question = input("back list games? (yes: list games)(no type: user menu) : ")
             if question == "yes":
                 show_user_games(user_id)
