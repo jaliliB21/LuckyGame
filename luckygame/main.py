@@ -1,4 +1,5 @@
 from registering import sign_up, login
+from validation import validate_username, validate_password
 
 while True:
     '''
@@ -9,17 +10,31 @@ while True:
     choice = input("choose: 1:sin up, 2:login, 3:exit: ")
 
     if choice == '1':
-        username = input("username: ")
-        password = input("password: ")
-        sign_up(username, password)
+        # edit to version 3.0.1 and 3.1
+
+        while True:
+            username = input("username: ")
+            password = input("password: ")
+            validate_username(username)
+            if not validate_username(username):
+                print("Username must be between 3 and 10 characters.")
+
+            if not validate_password(password):
+                continue
+            if sign_up(username, password):
+                break
+
 
     elif choice == '2':
-        username = input("username: ")
-        password = input("password: ")
+        # edit to version 3.0.1
+        while True:
+            username = input("username: ")
+            password = input("password: ")
 
-        # login - If the login is successful, the loop will break
-        if login(username, password):
-            break
+            # login - If the login is successful, the loop will break
+            if login(username, password):
+                break
+        break
 
     elif choice == '3':
         print("exits")

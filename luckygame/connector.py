@@ -30,9 +30,9 @@ def update_game() -> None:
 
     # Updating the selected record in the table of games
     cursor.execute(
-        "UPDATE games SET change_box = ?, score = ?, total_boxes = ?, mojeze = ?, gold_coin = ? "
+        "UPDATE games SET chance_box = ?, score = ?, total_boxes = ?, mojeze = ?, gold_coin = ? "
         "WHERE user_id = ?",
-        (sample.myChangeBox, sample.myScore, sample.total_boxes, sample.mojeze, sample.GoldCoin, user_id)
+        (sample.myChanceBox, sample.myScore, sample.total_boxes, sample.mojeze, sample.GoldCoin, user_id)
     )
     # save the information
     conn.commit()

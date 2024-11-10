@@ -1,12 +1,19 @@
 import random
+from prettytable import PrettyTable
 from connector import update_game
+from connector2 import called
+
+
+table = PrettyTable()
 
 
 class LuckyGame:
+    table.field_names = ["GoldCoin", "Sum Score", "Your Chances", "Total Box", "Mojeze"]
+
     def __init__(self, user_id: int, name: str):
         self.user_id = user_id
         self.name = name
-        self.myChangeBox = 2
+        self.myChanceBox = 2
         self.myScore = 0
         self.total_boxes = 0
         self.mojeze = 0
@@ -35,7 +42,7 @@ class LuckyGame:
             now_score = 120
             self.GoldCoin += 16
         elif randomit == ['chance again']:
-            self.myChangeBox += 1
+            self.myChanceBox += 1
             now_score = 0
         elif randomit == ['point 200']:
             self.myScore += 200
@@ -44,32 +51,38 @@ class LuckyGame:
             self.GoldCoin += 50
             print(f'♥♥♥ mojeze: {self.mojeze}')
 
-        self.myChangeBox -= 1
+        self.myChanceBox -= 1
         self.total_boxes += 1
-        print("Chane Box:", self.myChangeBox)
-        print("Your Total Scores:", self.myScore)
-        print("Your score from  this box:", now_score)
+
+        # edit to version 3.0.1
+        print(f"***Chance Box: {self.myChanceBox}***")
+        print(f"***Your Total Scores: {self.myScore}***")
+        print(f"***Your score from  this box: {now_score}***")
 
     def lucky_game(self):
         while True:
             luckyGame = input("Open the box width: 'openbox' OR finish with: 'exit'>>>")
             if luckyGame == 'openbox':
-                if self.myChangeBox != 0:
+                if self.myChanceBox != 0:
                     self.change()
                         
                 else:
                     print()
                     print("NO...\tRemaining chance: 0")
+
                     
             elif luckyGame == "exit":
                 self.starter()
 
-            if self.myChangeBox == 0 and self.myScore < 30:
+            if self.myChanceBox == 0 and self.myScore < 30:
                 print()
                 print("you not lucky enough! try again...")
                 print("total boxes:", self.total_boxes)
                 print(100*'-')
                 self.status2()
+                update_game()
+                # add to version 3.0.1
+                called(user_id=self.user_id)
                 exit()
             else:
                 self.lucky_game()
@@ -79,7 +92,7 @@ class LuckyGame:
             starter = input("lucky game, store, status, for end program \"exit\">>>")
             if starter == "lucky game":
                 self.lucky_game()
-            elif starter == "stats":
+            elif starter == "status":
                 self.status()
             elif starter == "store":
                 self.store()
@@ -87,25 +100,32 @@ class LuckyGame:
                 print(100*'-')
                 self.status2()
                 update_game()
+                # add to version 3.0.1
+                called(user_id=self.user_id)
                 exit()
             else:
+                if self.GoldCoin > 0:
+                    update_game()
                 print("lucky game, store, for end program \"exit\">>>")
+
+        # update_game()
 
     def store(self):
         while True:
-            print("your Score:", self.myScore, "your chances:", self.myChangeBox)
+            print("your Score:", self.myScore, "your chances:", self.myChanceBox)
             store = input("30 Scores for 1 chance: \"buy\" exit: \"exit\">>>")
             if store == "buy":
                 if self.myScore < 30:
                     print("not enough Score")
-                    if self.myChangeBox > 0:
+                    if self.myChanceBox > 0:
                         self.lucky_game()
                     else:
                         self.status2()
+                        update_game()
                         exit()
 
                 else:
-                    self.myChangeBox += 1
+                    self.myChanceBox += 1
                     self.myScore -= 30
                     print("purchase successful!")
             elif store == "exit":
@@ -114,17 +134,20 @@ class LuckyGame:
         self.lucky_game()
     
     def status(self):
-        print(f'$$ GoldCoin: {self.GoldCoin}\nsum Score: {self.myScore}\t\tyour chances: {self.myChangeBox}'
-              f'\ntotal box: {self.total_boxes}\t\tmojeze: {self.mojeze}')
-        print()
+        # add and edit to version 3.0.1
+        table.clear_rows()
+        table.add_row([self.GoldCoin, self.myScore, self.myChanceBox, self.total_boxes, self.mojeze])
+        print(f'{table}\n')
+
         self.starter()
 
     def status2(self):
-        print(f'$$ GoldCoin: {self.GoldCoin}\nsum Score: {self.myScore}\t\tyour chances: {self.myChangeBox}'
-              f'\ntotal box: {self.total_boxes}\t\tmojeze: {self.mojeze}')
-        print()
+
+        # add and edit to version 3.0.1
+        table.clear_rows()
+        table.add_row([self.GoldCoin, self.myScore, self.myChanceBox, self.total_boxes, self.mojeze])
+        print(f'{table}\n')
 
     
 def update_sample_class():
     pass
-

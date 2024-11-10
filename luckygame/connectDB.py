@@ -25,7 +25,7 @@ try:
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         name TEXT,
-        change_box INTEGER,
+        chance_box INTEGER,
         score INTEGER,
         total_boxes INTEGER,
         mojeze INTEGER,
